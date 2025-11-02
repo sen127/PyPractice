@@ -1,0 +1,1 @@
+x = input("Enter the numbers and the oprtator")
