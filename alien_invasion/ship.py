@@ -12,7 +12,7 @@ class Ship:
         self.settings = ai_game.settings
         
         # Load the ship image and get its rect.
-        image_path = Path(__file__).resolve().parent / 'images' / 'ship.bmp'
+        image_path = Path(__file__).resolve().parent / 'images' / 'user_ship.jpeg'
         self.image  = pygame.image.load(str(image_path)).convert_alpha()
         
         # Scale overly large bitmaps so the ship stays near the bottom center.

@@ -9,12 +9,15 @@ class Settings:
         self.bg_color = (255, 255, 255)
 
         # Ship settings
-        self.ship_scale = 0.07  # Percentage of original bitmap size
+        self.ship_scale = 0.05  # Percentage of original bitmap size
         self.ship_speed = 1.5
+
+        # Alien settings
+        self.alien_scale = 0.05
 
         # Bullet Settings
         self.bullet_speed = 2.0
         self.bullet_width = 3
         self.bullet_height = 15
-        self.bullet_color = (60,60,60)
-        self.bullets_allowed = 10
+        self.bullet_color = (0, 115, 255)
+        self.bullets_allowed = 100

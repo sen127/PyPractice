@@ -1,9 +1,12 @@
 import sys
+from pathlib import Path
+
 import pygame
 
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -15,11 +18,23 @@ class AlienInvasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption('Alien Invasion')
+
+        bg_path = Path(__file__).resolve().parent / 'images' / 'background.jpeg'
+        self.background = pygame.image.load(str(bg_path)).convert()
+        self.background = pygame.transform.smoothscale(
+            self.background, (self.settings.screen_width, self.settings.screen_height)
+        )
+
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.fire_button_held = False
         self.last_shot_time = 0
         self.fire_delay = 150  # milliseconds between shots while the key is held
+        self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def run_game(self):  # Self is the object's memory backpack so the game can access its own data
         """Start the main loop for the game."""
@@ -85,12 +100,32 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+    def _create_fleet(self):
+        """Create a full row of aliens."""
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        number_aliens = 1
+        if alien_width > 0:
+            number_aliens = max(1, (self.settings.screen_width + alien_width - 1) // alien_width)
+
+        for alien_number in range(number_aliens):
+            self._create_alien(alien_number, alien_width)
+
+    def _create_alien(self, alien_number, alien_width):
+        """Create an alien and place it in the row."""
+        alien = Alien(self)
+        alien.rect.x = alien_width * alien_number
+        alien.rect.y = 0
+        alien.x = float(alien.rect.x)
+        self.aliens.add(alien)
+            
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.background, (0, 0))
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip()
 
