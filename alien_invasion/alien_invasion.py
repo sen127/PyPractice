@@ -33,6 +33,7 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.fleet_has_moved = False
 
         self._create_fleet()
 
@@ -43,6 +44,7 @@ class AlienInvasion:
             self._handle_continuous_fire()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
@@ -106,10 +108,11 @@ class AlienInvasion:
         alien_width = alien.rect.width
         number_aliens = 1
         if alien_width > 0:
-            number_aliens = max(1, (self.settings.screen_width + alien_width - 1) // alien_width)
+            number_aliens = max(1, self.settings.screen_width // alien_width * 2)
 
         for alien_number in range(number_aliens):
             self._create_alien(alien_number, alien_width)
+        self.fleet_has_moved = False
 
     def _create_alien(self, alien_number, alien_width):
         """Create an alien and place it in the row."""
@@ -118,6 +121,27 @@ class AlienInvasion:
         alien.rect.y = 0
         alien.x = float(alien.rect.x)
         self.aliens.add(alien)
+
+    def _check_fleet_edges(self):
+        """Respond appropriately if any aliens have reached an edge."""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+    
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change the fleet's direction."""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
+
+    def _update_aliens(self):
+        """Update the positions of all aliens in the fleet."""
+        if self.fleet_has_moved:
+            self._check_fleet_edges()
+        else:
+            self.fleet_has_moved = True
+        self.aliens.update()
             
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -128,7 +152,6 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
 
         pygame.display.flip()
-
 
 if __name__ == '__main__':  # This ensures the game runs only when this file is executed directly, not when imported
     # Make a game instance, and run the game.
