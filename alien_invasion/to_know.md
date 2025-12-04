@@ -17,5 +17,6 @@ Why _functionname syntax
     _init_ or _str_ --> dunder methods, are built in features, magic methods reserved by python
     _name --> internal not imported, soft private methods
 
-What is a string literal and a tuple? 
+What is a string literal and a tuple?
+    - 
     
