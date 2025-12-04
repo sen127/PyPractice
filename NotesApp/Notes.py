@@ -1,3 +1,4 @@
+# A simple note-taking application that allows users to create, read, append to, and list text notes stored in a designated directory.
 from __future__ import annotations
 import sys
 from pathlib import Path
