@@ -1,8 +1,3 @@
-#TODO write a program using which I can write notes in files and read from them, so it basically creates a file or access the same and edit, read etc.."""Simple CLI utility for creating, reading, and updating text notes.
-"""Notes are stored next to this script (in the Notes directory). The tool
-supports listing available notes, reading an existing note, creating a
-new one, and appending additional text to an existing note.
-"""
 from __future__ import annotations
 import sys
 from pathlib import Path
